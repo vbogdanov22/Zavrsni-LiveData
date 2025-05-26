@@ -1,4 +1,4 @@
-package hr.foi.zavrsniapp.data
+package hr.foi.zavrsniapp.data.models
 
 data class WeatherResponse(
     val location: Location,
