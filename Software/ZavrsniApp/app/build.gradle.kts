@@ -1,7 +1,20 @@
+import org.jetbrains.kotlin.gradle.internal.Kapt3GradleSubplugin.Companion.disableClassloaderCacheForProcessors
+
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+}
+
+fun getApiKey(propertyKey: String): String {
+    val properties = Properties()
+    val localPropertiesFile = project.rootProject.file("local.properties")
+    if(localPropertiesFile.exists()){
+        properties.load(localPropertiesFile.inputStream())
+    }
+    return properties.getProperty(propertyKey) ?: ""
 }
 
 android {
@@ -16,11 +29,14 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "WEATHER_API_KEY", getApiKey("WEATHER_API_KEY"))
     }
 
     // razmislit o tome da li je potrebno
     buildFeatures{
         viewBinding = true
+        buildConfig = true
     }
 
     buildTypes {
