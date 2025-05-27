@@ -16,13 +16,25 @@ class WeatherActivity : ComponentActivity() {
         binding = WeatherActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupListeners()
+
+        weatherViewModel.rawWeatherData.observe(this) { weatherResponse ->
+            if (weatherResponse != null) {
+                binding.tvLocation.text = "${weatherResponse.location.name}, ${weatherResponse.location.country}"
+                val isCelsius = weatherViewModel.isCelsiusUnit.value == true
+                val temp = if (isCelsius) weatherResponse.current.temp_c else weatherResponse.current.temp_f
+                val unit = if (isCelsius) "°C" else "°F"
+                binding.tvTemperature.text = "$temp$unit"
+                binding.tvCondition.text = weatherResponse.current.condition.text
+            }
+        }
     }
 
     private fun setupListeners(){
-//        binding.btnFetchWeather.setOnClickListener{
-//            val location = binding.etCityInput.text.toString()
-//            weatherViewModel.LocationInput.value = location
-//        }
+        binding.btnFetchWeather.setOnClickListener{
+            val location = binding.etCityInput.text.toString()
+            weatherViewModel.setLocationInput(location)
+            binding.tvLocation.text = weatherViewModel.LocationInput.value
+        }
 
         binding.btnToggleUnit.setOnClickListener {
             weatherViewModel.toggleTemperatureUnit()

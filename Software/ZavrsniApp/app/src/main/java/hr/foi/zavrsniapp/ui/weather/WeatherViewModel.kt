@@ -1,5 +1,6 @@
 package hr.foi.zavrsniapp.ui.weather
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.switchMap
@@ -14,6 +15,10 @@ class WeatherViewModel(private val repository: WeatherRepository = WeatherReposi
     private val _locationInput: MutableLiveData<String> = MutableLiveData("Zagreb")
     val LocationInput: LiveData<String> = _locationInput
 
+    fun setLocationInput(location: String) {
+        _locationInput.value = location
+    }
+
     val rawWeatherData: LiveData<WeatherResponse?> = _locationInput.switchMap { location ->
         androidx.lifecycle.liveData {
             emit(null)
@@ -21,7 +26,7 @@ class WeatherViewModel(private val repository: WeatherRepository = WeatherReposi
                 val response = repository.getWeather(location)
                 emit(response)
             } catch (e: Exception) {
-                println("Error fetching weather data: ${e.message}")
+                Log.e("WVM", "Error fetching weather data: ${e.message}")
                 emit(null)
             }
         }
