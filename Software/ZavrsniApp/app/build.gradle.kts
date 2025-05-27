@@ -76,9 +76,10 @@ dependencies {
     implementation(libs.retrofit.converterGson)
 
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.7.0")
+    implementation(libs.glide)
+
     implementation(libs.androidx.constraintlayout)
     implementation(libs.material)
-
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

@@ -83,6 +83,14 @@
             tools:text="Sunny" />
     </LinearLayout>
 
+    <ImageView
+        android:id="@+id/ivConditionIcon"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="16dp"
+        tools:src="@drawable/ic_launcher_foreground" />
+
     <Button
         android:id="@+id/btnToggleUnit"
         android:layout_width="match_parent"

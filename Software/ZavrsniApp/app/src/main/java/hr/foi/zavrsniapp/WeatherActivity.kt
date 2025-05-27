@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.viewModels
+import com.bumptech.glide.Glide
 import hr.foi.zavrsniapp.databinding.WeatherActivityBinding
 import hr.foi.zavrsniapp.ui.weather.WeatherViewModel
 
@@ -35,6 +36,11 @@ class WeatherActivity : ComponentActivity() {
             val unit = if (isCelsius) "°C" else "°F"
             binding.tvTemperature.text = "$temp$unit"
             binding.tvCondition.text = weatherResponse.current.condition.text
+
+            val iconUrl = "https:${weatherResponse.current.condition.icon}"
+            Glide.with(this)
+                .load(iconUrl)
+                .into(binding.ivConditionIcon)
         }
     }
 
