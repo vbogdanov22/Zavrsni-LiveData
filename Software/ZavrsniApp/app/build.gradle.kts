@@ -75,6 +75,8 @@ dependencies {
     implementation(libs.retrofit.core)
     implementation(libs.retrofit.converterGson)
 
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.7.0")
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
