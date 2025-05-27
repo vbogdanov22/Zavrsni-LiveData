@@ -9,11 +9,10 @@ import hr.foi.zavrsniapp.data.models.WeatherResponse
 import hr.foi.zavrsniapp.data.repository.WeatherRepository
 
 class WeatherViewModel(private val repository: WeatherRepository = WeatherRepository()) : ViewModel() {
+
+    // LOCATION INPUT
     private val _locationInput: MutableLiveData<String> = MutableLiveData("Zagreb")
     val LocationInput: LiveData<String> = _locationInput
-
-    private val _isCelsiusUnit: MutableLiveData<Boolean> = MutableLiveData(true)
-    val isCelsiusUnit: LiveData<Boolean> = _isCelsiusUnit
 
     val rawWeatherData: LiveData<WeatherResponse?> = _locationInput.switchMap { location ->
         androidx.lifecycle.liveData {
@@ -26,5 +25,13 @@ class WeatherViewModel(private val repository: WeatherRepository = WeatherReposi
                 emit(null)
             }
         }
+    }
+
+    // TEMP UNIT TOGGLE
+    private val _isCelsiusUnit: MutableLiveData<Boolean> = MutableLiveData(true)
+    val isCelsiusUnit: LiveData<Boolean> = _isCelsiusUnit
+
+    fun toggleTemperatureUnit() {
+        _isCelsiusUnit.value = !(_isCelsiusUnit.value ?: true)
     }
 }
