@@ -1,13 +1,17 @@
 package hr.foi.zavrsniapp.ui.weather
 
 import android.util.Log
+
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.switchMap
 import androidx.lifecycle.ViewModel
+
 import hr.foi.zavrsniapp.data.models.Condition
 import hr.foi.zavrsniapp.data.models.Current
 import hr.foi.zavrsniapp.data.models.Location
+import hr.foi.zavrsniapp.data.models.WeatherDisplayData
 
 import hr.foi.zavrsniapp.data.models.WeatherResponse
 import hr.foi.zavrsniapp.data.repository.WeatherRepository
@@ -22,7 +26,16 @@ class WeatherViewModel(private val repository: WeatherRepository = WeatherReposi
         _locationInput.value = location
     }
 
-    val rawWeatherData: LiveData<WeatherResponse?> = _locationInput.switchMap { location ->
+    // UNIT TOGGLE
+    private val _isMetricUnit: MutableLiveData<Boolean> = MutableLiveData(true)
+    val isMetricUnit: LiveData<Boolean> = _isMetricUnit
+
+    fun toggleUnitType() {
+        _isMetricUnit.value = !(_isMetricUnit.value ?: true)
+    }
+
+    // WEATHER DATA
+    private val _weatherData: LiveData<WeatherResponse?> = _locationInput.switchMap { location ->
         androidx.lifecycle.liveData {
             if (location.isNullOrBlank()) {
                 emit(loadMockWeather())
@@ -39,6 +52,27 @@ class WeatherViewModel(private val repository: WeatherRepository = WeatherReposi
                 Log.d("WVM", "Weather data fetched for location: $location")
             }
         }
+    }
+
+    val weatherData: LiveData<WeatherDisplayData?> = MediatorLiveData<WeatherDisplayData?>().apply {
+        fun update() {
+            val weather = _weatherData.value
+            val isMetric = _isMetricUnit.value ?: true
+            value = weather?.let {
+                WeatherDisplayData(
+                    location = "${it.location.name}, ${it.location.country}",
+                    temperature = if (isMetric) "${it.current.temp_c} °C" else "${it.current.temp_f} °F",
+                    feelsLike = if (isMetric) "${it.current.feelslike_c} °C" else "${it.current.feelslike_f} °F",
+                    condition = it.current.condition.text,
+                    windSpeed = if (isMetric) "${it.current.wind_kph} km/h" else "${it.current.wind_mph} mph",
+                    lastUpdated = it.current.last_updated,
+                    iconUrl = "https:${it.current.condition.icon}"
+                )
+            }
+            Log.d("WVM", "WeatherDisplayData updated: $value")
+        }
+        addSource(_weatherData) { update() }
+        addSource(_isMetricUnit) { update() }
     }
 
     private fun loadMockWeather(): WeatherResponse {
@@ -89,13 +123,5 @@ class WeatherViewModel(private val repository: WeatherRepository = WeatherReposi
                 gust_kph = 6.8
             )
         )
-    }
-
-    // UNIT TOGGLE
-    private val _isMetricUnit: MutableLiveData<Boolean> = MutableLiveData(true)
-    val isMetricUnit: LiveData<Boolean> = _isMetricUnit
-
-    fun toggleUnitType() {
-        _isMetricUnit.value = !(_isMetricUnit.value ?: true)
     }
 }

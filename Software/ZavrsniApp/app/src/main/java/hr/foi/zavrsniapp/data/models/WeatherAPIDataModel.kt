@@ -53,3 +53,13 @@ data class Condition(
     val icon: String,
     val code: Int
 )
+
+data class WeatherDisplayData(
+    val location: String,
+    val temperature: String,
+    val feelsLike: String,
+    val condition: String,
+    val iconUrl: String,
+    val lastUpdated: String,
+    val windSpeed: String
+)

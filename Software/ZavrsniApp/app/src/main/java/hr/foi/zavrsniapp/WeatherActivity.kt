@@ -18,7 +18,7 @@ class WeatherActivity : ComponentActivity() {
         setContentView(binding.root)
         setupListeners()
 
-        weatherViewModel.rawWeatherData.observe(this) {
+        weatherViewModel.weatherData.observe(this) {
             updateUI()
         }
 
@@ -28,30 +28,17 @@ class WeatherActivity : ComponentActivity() {
     }
 
     private fun updateUI(){
-        val weatherResponse = weatherViewModel.rawWeatherData.value
+        val weatherResponse = weatherViewModel.weatherData.value
         if (weatherResponse != null) {
-            binding.tvLocation.text = "${weatherResponse.location.name}, ${weatherResponse.location.country}"
+            binding.tvLocation.text = weatherResponse.location
+            binding.tvTemperature.text = weatherResponse.temperature
+            binding.tvFeelsLike.text = weatherResponse.feelsLike
+            binding.tvCondition.text = weatherResponse.condition
+            binding.tvLastUpdated.text = weatherResponse.lastUpdated
+            binding.tvWindSpeed.text = weatherResponse.windSpeed
 
-            val isMetric = weatherViewModel.isMetricUnit.value == true
-            val tempUnit = if (isMetric) "°C" else "°F"
-            val speedUnit = if (isMetric) "km/h" else "mph"
-
-            val temp = if (isMetric) weatherResponse.current.temp_c else weatherResponse.current.temp_f
-            binding.tvTemperature.text = "$temp$tempUnit"
-
-            val tempFeel = if(isMetric) weatherResponse.current.feelslike_c else weatherResponse.current.feelslike_f
-            binding.tvFeelsLike.text = "$tempFeel$tempUnit"
-
-            binding.tvCondition.text = weatherResponse.current.condition.text
-
-            val speed = if(isMetric) weatherResponse.current.wind_kph else weatherResponse.current.wind_mph
-            binding.tvWindSpeed.text = "$speed$speedUnit"
-
-            binding.tvLastUpdated.text = weatherResponse.current.last_updated
-
-            val iconUrl = "https:${weatherResponse.current.condition.icon}"
             Glide.with(this)
-                .load(iconUrl)
+                .load(weatherResponse.iconUrl)
                 .into(binding.ivConditionIcon)
         }
     }
