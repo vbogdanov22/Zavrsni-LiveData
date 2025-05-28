@@ -22,7 +22,7 @@ class WeatherActivity : ComponentActivity() {
             updateUI()
         }
 
-        weatherViewModel.isCelsiusUnit.observe(this) {
+        weatherViewModel.isMetricUnit.observe(this) {
             updateUI()
         }
     }
@@ -32,19 +32,19 @@ class WeatherActivity : ComponentActivity() {
         if (weatherResponse != null) {
             binding.tvLocation.text = "${weatherResponse.location.name}, ${weatherResponse.location.country}"
 
-            val isCelsius = weatherViewModel.isCelsiusUnit.value == true
-            val unit = if (isCelsius) "°C" else "°F"
+            val isMetric = weatherViewModel.isMetricUnit.value == true
+            val tempUnit = if (isMetric) "°C" else "°F"
+            val speedUnit = if (isMetric) "km/h" else "mph"
 
-            val temp = if (isCelsius) weatherResponse.current.temp_c else weatherResponse.current.temp_f
-            binding.tvTemperature.text = "$temp$unit"
+            val temp = if (isMetric) weatherResponse.current.temp_c else weatherResponse.current.temp_f
+            binding.tvTemperature.text = "$temp$tempUnit"
 
-            val tempFeel = if(isCelsius) weatherResponse.current.feelslike_c else weatherResponse.current.feelslike_f
-            binding.tvFeelsLike.text = "$tempFeel$unit"
+            val tempFeel = if(isMetric) weatherResponse.current.feelslike_c else weatherResponse.current.feelslike_f
+            binding.tvFeelsLike.text = "$tempFeel$tempUnit"
 
             binding.tvCondition.text = weatherResponse.current.condition.text
 
-            val speedUnit = if (isCelsius) "km/h" else "mph"
-            val speed = if(isCelsius) weatherResponse.current.wind_kph else weatherResponse.current.wind_mph
+            val speed = if(isMetric) weatherResponse.current.wind_kph else weatherResponse.current.wind_mph
             binding.tvWindSpeed.text = "$speed$speedUnit"
 
             binding.tvLastUpdated.text = weatherResponse.current.last_updated
@@ -60,17 +60,16 @@ class WeatherActivity : ComponentActivity() {
         binding.btnFetchWeather.setOnClickListener{
             val location = binding.etLocationInput.text.toString()
             weatherViewModel.setLocationInput(location)
-            binding.tvLocation.text = weatherViewModel.LocationInput.value
         }
 
         binding.btnToggleUnit.setOnClickListener {
-            weatherViewModel.toggleTemperatureUnit()
-            val unit = if (weatherViewModel.isCelsiusUnit.value == true) {
-                "C"
+            weatherViewModel.toggleUnitType()
+            val unit = if (weatherViewModel.isMetricUnit.value == true) {
+                "metric"
             } else {
-                "F"
+                "imperial"
             }
-            Toast.makeText(this, "Temperature unit changed to $unit", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Units: $unit", Toast.LENGTH_SHORT).show()
         }
     }
 }

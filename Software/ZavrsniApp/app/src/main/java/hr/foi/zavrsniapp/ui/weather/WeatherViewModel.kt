@@ -16,7 +16,7 @@ class WeatherViewModel(private val repository: WeatherRepository = WeatherReposi
 
     // LOCATION INPUT
     private val _locationInput: MutableLiveData<String> = MutableLiveData(null)
-    val LocationInput: LiveData<String> = _locationInput
+    //val LocationInput: LiveData<String> = _locationInput
 
     fun setLocationInput(location: String) {
         _locationInput.value = location
@@ -27,9 +27,10 @@ class WeatherViewModel(private val repository: WeatherRepository = WeatherReposi
             if (location.isNullOrBlank()) {
                 emit(loadMockWeather())
             } else {
-                emit(null)
                 try {
+                    Log.d("WVM", "Attempting fetch of weather data for $location")
                     val response = repository.getWeather(location)
+                    Log.d("WVM", "$response")
                     emit(response)
                 } catch (e: Exception) {
                     Log.e("WVM", "Error fetching weather data: ${e.message}")
@@ -90,11 +91,11 @@ class WeatherViewModel(private val repository: WeatherRepository = WeatherReposi
         )
     }
 
-    // TEMP UNIT TOGGLE
-    private val _isCelsiusUnit: MutableLiveData<Boolean> = MutableLiveData(true)
-    val isCelsiusUnit: LiveData<Boolean> = _isCelsiusUnit
+    // UNIT TOGGLE
+    private val _isMetricUnit: MutableLiveData<Boolean> = MutableLiveData(true)
+    val isMetricUnit: LiveData<Boolean> = _isMetricUnit
 
-    fun toggleTemperatureUnit() {
-        _isCelsiusUnit.value = !(_isCelsiusUnit.value ?: true)
+    fun toggleUnitType() {
+        _isMetricUnit.value = !(_isMetricUnit.value ?: true)
     }
 }
