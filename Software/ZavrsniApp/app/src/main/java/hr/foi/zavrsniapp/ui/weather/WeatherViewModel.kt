@@ -65,7 +65,16 @@ class WeatherViewModel(private val repository: WeatherRepository = WeatherReposi
                     feelsLike = if (isMetric) "${it.current.feelslike_c} °C" else "${it.current.feelslike_f} °F",
                     condition = it.current.condition.text,
                     windSpeed = if (isMetric) "${it.current.wind_kph} km/h" else "${it.current.wind_mph} mph",
-                    lastUpdated = it.current.last_updated,
+                    lastUpdated = it.current.last_updated.let { dt ->
+                        try {
+                            val inputFormat = java.text.SimpleDateFormat("yyyy-MM-dd HH:mm", java.util.Locale.getDefault())
+                            val date = inputFormat.parse(dt)
+                            val outputFormat = java.text.SimpleDateFormat("HH:mm (dd.MM.)", java.util.Locale.getDefault())
+                            outputFormat.format(date ?: dt)
+                        } catch (e: Exception) {
+                            dt
+                        }
+                    },
                     iconUrl = "https:${it.current.condition.icon}"
                 )
             }
