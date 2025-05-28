@@ -20,7 +20,6 @@ class WeatherViewModel(private val repository: WeatherRepository = WeatherReposi
 
     // LOCATION INPUT
     private val _locationInput: MutableLiveData<String> = MutableLiveData(null)
-    //val LocationInput: LiveData<String> = _locationInput
 
     fun setLocationInput(location: String) {
         _locationInput.value = location

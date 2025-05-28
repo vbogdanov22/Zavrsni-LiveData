@@ -37,6 +37,7 @@ class WeatherActivity : ComponentActivity() {
             binding.tvLastUpdated.text = weatherResponse.lastUpdated
             binding.tvWindSpeed.text = weatherResponse.windSpeed
 
+            @Suppress("DEPRECATION")
             Glide.with(this)
                 .load(weatherResponse.iconUrl)
                 .into(binding.ivConditionIcon)

@@ -5,6 +5,7 @@ data class WeatherResponse(
     val current: Current
 )
 
+@Suppress("PropertyName")
 data class Location(
     val name: String,
     val region: String,
@@ -16,6 +17,7 @@ data class Location(
     val localtime: String
 )
 
+@Suppress("PropertyName")
 data class Current(
     val last_updated_epoch: Long,
     val last_updated: String,
