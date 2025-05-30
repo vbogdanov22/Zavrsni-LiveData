@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">Zavrsni App</string>
+    <string name="weather">Weather</string>
+    <string name="location">Location:</string>
+    <string name="temperature">Temperature:</string>
+    <string name="condition">Condition:</string>
+    <string name="toggle_unit">Toggle Unit</string>
+    <string name="enter_location">Enter Location</string>
+    <string name="fetch_weather">Fetch Weather</string>
+    <string name="last_updated">Last updated:</string>
+    <string name="wind_speed">Wind speed:</string>
+    <string name="feels_like">Feels like:</string>
 </resources>
