@@ -10,6 +10,8 @@ data class NbaGame(
     val AwayTeam: String,
     val HomeTeam: String,
     val AwayTeamScore: Int?,
-    val HomeTeamScore: Int?
-    // Add more fields as needed
+    val HomeTeamScore: Int?,
+    val Quarter: String?,
+    val TimeRemainingMinutes: Int?,
+    val TimeRemainingSeconds: Int?,
 )
