@@ -6,16 +6,26 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitClient {
     private const val BASE_URL_WEATHER = "https://api.weatherapi.com/v1/"
+    private const val BASE_URL_SPORTS = "https://replay.sportsdata.io/v3/nba/"
 
     val client = OkHttpClient.Builder()
         .build()
 
-    val apiService: WeatherAPIService by lazy {
+    val weatherApiService: WeatherAPIService by lazy {
         Retrofit.Builder()
             .baseUrl(BASE_URL_WEATHER)
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()
             .create(WeatherAPIService::class.java)
+    }
+
+    val sportsApiService: SportsAPIService by lazy {
+        Retrofit.Builder()
+            .baseUrl(BASE_URL_SPORTS)
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(client)
+            .build()
+            .create(SportsAPIService::class.java)
     }
 }
