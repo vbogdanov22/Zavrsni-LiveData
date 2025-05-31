@@ -6,7 +6,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitClient {
     private const val BASE_URL_WEATHER = "https://api.weatherapi.com/v1/"
-    private const val BASE_URL_SPORTS = "https://replay.sportsdata.io/v3/nba/"
+    private const val BASE_URL_SPORTS = "https://replay.sportsdata.io/v3/nba/pbp/json/playbyplay/20884?key="
 
     val client = OkHttpClient.Builder()
         .build()
