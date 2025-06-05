@@ -2,15 +2,18 @@ package hr.foi.zavrsniapp
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.ComponentActivity
 import androidx.activity.viewModels
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import hr.foi.zavrsniapp.ui.sports.SportsViewModel
+import com.bumptech.glide.Glide
 
 class SportsActivity : ComponentActivity() {
     private val viewModel: SportsViewModel by viewModels()
 
+    @Suppress("DEPRECATION")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.sports_activity)
@@ -21,6 +24,8 @@ class SportsActivity : ComponentActivity() {
         val statusView = findViewById<TextView>(R.id.tvStatus)
         val teamsView = findViewById<TextView>(R.id.tvTeams)
         val scoresView = findViewById<TextView>(R.id.tvScores)
+        val awayLogoView = findViewById<ImageView>(R.id.ivAwayTeamLogo)
+        val homeLogoView = findViewById<ImageView>(R.id.ivHomeTeamLogo)
 
         val gameId = "20884"
         viewModel.startRefreshing(gameId)
@@ -43,6 +48,11 @@ class SportsActivity : ComponentActivity() {
                 statusView.text = "${game.Status}"
                 teamsView.text = "${game.AwayTeam} — ${game.HomeTeam}"
                 scoresView.text = "${game.AwayTeamScore ?: "-"} - ${game.HomeTeamScore ?: "-"}"
+
+                val awayLogoUrl = "https://a.espncdn.com/i/teamlogos/nba/500/${game.AwayTeam}.png"
+                val homeLogoUrl = "https://a.espncdn.com/i/teamlogos/nba/500/${game.HomeTeam}.png"
+                Glide.with(this).load(awayLogoUrl).into(awayLogoView)
+                Glide.with(this).load(homeLogoUrl).into(homeLogoView)
             }
         }
 
