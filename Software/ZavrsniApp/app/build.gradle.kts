@@ -75,6 +75,7 @@ dependencies {
     // RETROFIT
     implementation(libs.retrofit.core)
     implementation(libs.retrofit.converterGson)
+    implementation("com.squareup.okhttp3:logging-interceptor:4.9.3")
 
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.7.0")
     implementation(libs.glide)

@@ -7,7 +7,7 @@ import hr.foi.zavrsniapp.BuildConfig
 class SportsRepository {
     private val apiKey: String = BuildConfig.SPORTS_API_KEY
 
-    suspend fun getGamesByDate(date: String): List<NbaGame> {
-        return RetrofitClient.sportsApiService.getGamesByDate(date, apiKey)
+    suspend fun getGamesById(gameId: String): List<NbaGame> {
+        return RetrofitClient.sportsApiService.getGamesByDate(gameId, apiKey)
     }
 }

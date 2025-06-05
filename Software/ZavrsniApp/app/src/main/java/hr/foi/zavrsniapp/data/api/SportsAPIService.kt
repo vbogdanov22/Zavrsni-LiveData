@@ -6,9 +6,9 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface SportsAPIService {
-    @GET("scores/json/GamesByDate/{date}")
+    @GET("{gameId}")
     suspend fun getGamesByDate(
-        @Path("date") date: String,
+        @Path("gameId") gameId: String,
         @Query("key") apiKey: String
     ): List<NbaGame>
 }

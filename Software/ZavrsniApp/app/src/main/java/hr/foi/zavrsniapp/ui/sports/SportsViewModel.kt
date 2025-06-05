@@ -15,12 +15,12 @@ class SportsViewModel(
 
     private var refreshJob: Job? = null
 
-    fun startRefreshing(date: String) {
+    fun startRefreshing(gameId: String) {
         if (refreshJob?.isActive == true) return
         refreshJob = viewModelScope.launch {
             while (true) {
                 try {
-                    val games = repository.getGamesByDate(date)
+                    val games = repository.getGamesById(gameId)
                     _game.value = games.firstOrNull()
                 } catch (_: Exception) {
                     _game.value = null

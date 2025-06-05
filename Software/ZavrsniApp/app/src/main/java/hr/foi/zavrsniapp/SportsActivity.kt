@@ -22,8 +22,8 @@ class SportsActivity : ComponentActivity() {
         val teamsView = findViewById<TextView>(R.id.tvTeams)
         val scoresView = findViewById<TextView>(R.id.tvScores)
 
-        val date = "2023-FEB-01"
-        viewModel.startRefreshing(date)
+        val gameId = "20884"
+        viewModel.startRefreshing(gameId)
 
         viewModel.game.observe(this) { game ->
             if (game != null) {
