@@ -21,7 +21,7 @@ class SportsViewModel(
         refreshJob = viewModelScope.launch {
             while (true) {
                 try {
-                    val game = repository.getGamesById(gameId)
+                    val game = repository.getGameById(gameId)
                     _game.value = game.Game
                     Log.d("SVM", "Game updated: $game")
                 } catch (_: Exception) {

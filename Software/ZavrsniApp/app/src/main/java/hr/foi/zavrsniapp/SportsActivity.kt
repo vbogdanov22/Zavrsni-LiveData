@@ -27,19 +27,12 @@ class SportsActivity : ComponentActivity() {
 
         viewModel.game.observe(this) { game ->
             if (game != null) {
-                gameIdView.text = "Game ID: ${game.GameID}"
-                timeRemainingView.text = "Time Remaining: ${game.TimeRemainingMinutes ?: "-"}m ${game.TimeRemainingSeconds ?: "-"}s"
-                seasonView.text = "Season: ${game.Season}"
-                statusView.text = "Status: ${game.Status}"
-                teamsView.text = "Teams: ${game.AwayTeam} @ ${game.HomeTeam}"
-                scoresView.text = "Scores: ${game.AwayTeamScore ?: "-"} - ${game.HomeTeamScore ?: "-"}"
-            } else {
-                gameIdView.text = "Game ID: -"
-                timeRemainingView.text = "Time Remaining: -"
-                seasonView.text = "Season: -"
-                statusView.text = "Status: -"
-                teamsView.text = "Teams: -"
-                scoresView.text = "Scores: -"
+                gameIdView.text = "${game.GameID}"
+                timeRemainingView.text = "${game.TimeRemainingMinutes ?: "-"}m ${game.TimeRemainingSeconds ?: "-"}s"
+                seasonView.text = "${game.Season}"
+                statusView.text = "${game.Status}"
+                teamsView.text = "${game.AwayTeam} — ${game.HomeTeam}"
+                scoresView.text = "${game.AwayTeamScore ?: "-"} - ${game.HomeTeamScore ?: "-"}"
             }
         }
 

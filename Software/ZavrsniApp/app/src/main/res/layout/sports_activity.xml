@@ -8,40 +8,89 @@
     android:padding="16dp">
 
     <TextView
+        android:id="@+id/tvGameIdLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Game ID:"
+        android:textSize="10sp" />
+
+    <TextView
         android:id="@+id/tvGameId"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Game ID:" />
+        android:text="-"
+        android:textSize="10sp" />
+
 
     <TextView
-        android:id="@+id/tvTimeRemaining"
+        android:id="@+id/tvTeamsLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Time Remaining:" />
-
-    <TextView
-        android:id="@+id/tvSeason"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Season:" />
-
-    <TextView
-        android:id="@+id/tvStatus"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Status:" />
+        android:layout_gravity="center_horizontal"
+        android:text="Teams:" />
 
     <TextView
         android:id="@+id/tvTeams"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Teams:" />
+        android:layout_gravity="center_horizontal"
+        android:text="-"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvScoresLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="Scores:" />
 
     <TextView
         android:id="@+id/tvScores"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Scores:" />
+        android:layout_gravity="center_horizontal"
+        android:text="-"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+
+
+    <TextView
+        android:id="@+id/tvTimeRemainingLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Time Remaining:" />
+
+    <TextView
+        android:id="@+id/tvTimeRemaining"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="-"/>
+
+    <TextView
+        android:id="@+id/tvSeasonLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Season:" />
+
+    <TextView
+        android:id="@+id/tvSeason"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="-"/>
+
+    <TextView
+        android:id="@+id/tvStatusLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Status:" />
+
+    <TextView
+        android:id="@+id/tvStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="-"/>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigation"
