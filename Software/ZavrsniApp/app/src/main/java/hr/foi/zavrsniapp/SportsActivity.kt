@@ -42,12 +42,11 @@ class SportsActivity : ComponentActivity() {
 
         viewModel.game.observe(this) { game ->
             if (game != null) {
-                gameIdView.text = "${game.GameID}"
-                //timeRemainingView.text = "${game.TimeRemainingMinutes ?: "-"}m ${game.TimeRemainingSeconds ?: "-"}s"
-                seasonView.text = "${game.Season}"
-                statusView.text = "${game.Status}"
-                teamsView.text = "${game.AwayTeam} — ${game.HomeTeam}"
-                scoresView.text = "${game.AwayTeamScore ?: "-"} - ${game.HomeTeamScore ?: "-"}"
+                gameIdView.text = game.GameID.toString()
+                seasonView.text = game.Season.toString()
+                statusView.text = game.Status
+                "${game.AwayTeam} — ${game.HomeTeam}".also { teamsView.text = it }
+                "${game.AwayTeamScore ?: "-"} - ${game.HomeTeamScore ?: "-"}".also { scoresView.text = it }
 
                 val awayLogoUrl = "https://a.espncdn.com/i/teamlogos/nba/500/${game.AwayTeam}.png"
                 val homeLogoUrl = "https://a.espncdn.com/i/teamlogos/nba/500/${game.HomeTeam}.png"

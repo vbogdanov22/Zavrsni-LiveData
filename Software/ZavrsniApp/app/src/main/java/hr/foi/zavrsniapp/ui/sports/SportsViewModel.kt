@@ -38,7 +38,7 @@ class SportsViewModel(
                 } catch (_: Exception) {
                     _game.value = null
                 }
-                kotlinx.coroutines.delay(30_000)
+                delay(30_000)
             }
         }
 
