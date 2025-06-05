@@ -1,17 +1,17 @@
 package hr.foi.zavrsniapp.ui.sports
 
 import androidx.lifecycle.*
+import hr.foi.zavrsniapp.data.models.NbaGame
 import hr.foi.zavrsniapp.data.repository.SportsRepository
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class SportsViewModel(
     private val repository: SportsRepository = SportsRepository()
 ) : ViewModel() {
 
-    private val _gameInfo = MutableLiveData<Pair<Int, Pair<Int?, Int?>>>()
-    val gameInfo: LiveData<Pair<Int, Pair<Int?, Int?>>> = _gameInfo
+    private val _game = MutableLiveData<NbaGame?>()
+    val game: LiveData<NbaGame?> = _game
 
     private var refreshJob: Job? = null
 
@@ -21,15 +21,11 @@ class SportsViewModel(
             while (true) {
                 try {
                     val games = repository.getGamesByDate(date)
-                    val firstGame = games.firstOrNull()
-                    if (firstGame != null) {
-                        _gameInfo.value = Pair(
-                            firstGame.GameID,
-                            Pair(firstGame.TimeRemainingMinutes, firstGame.TimeRemainingSeconds)
-                        )
-                    }
-                } catch (_: Exception) { }
-                delay(30_000)
+                    _game.value = games.firstOrNull()
+                } catch (_: Exception) {
+                    _game.value = null
+                }
+                kotlinx.coroutines.delay(30_000)
             }
         }
     }

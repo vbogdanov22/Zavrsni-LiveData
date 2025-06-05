@@ -17,14 +17,30 @@ class SportsActivity : ComponentActivity() {
 
         val gameIdView = findViewById<TextView>(R.id.tvGameId)
         val timeRemainingView = findViewById<TextView>(R.id.tvTimeRemaining)
+        val seasonView = findViewById<TextView>(R.id.tvSeason)
+        val statusView = findViewById<TextView>(R.id.tvStatus)
+        val teamsView = findViewById<TextView>(R.id.tvTeams)
+        val scoresView = findViewById<TextView>(R.id.tvScores)
 
         val date = "2023-FEB-01"
         viewModel.startRefreshing(date)
 
-        viewModel.gameInfo.observe(this) { info ->
-            gameIdView.text = "Game ID: ${info.first}"
-            val (minutes, seconds) = info.second
-            timeRemainingView.text = "Time Remaining: ${minutes ?: "-"}m ${seconds ?: "-"}s"
+        viewModel.game.observe(this) { game ->
+            if (game != null) {
+                gameIdView.text = "Game ID: ${game.GameID}"
+                timeRemainingView.text = "Time Remaining: ${game.TimeRemainingMinutes ?: "-"}m ${game.TimeRemainingSeconds ?: "-"}s"
+                seasonView.text = "Season: ${game.Season}"
+                statusView.text = "Status: ${game.Status}"
+                teamsView.text = "Teams: ${game.AwayTeam} @ ${game.HomeTeam}"
+                scoresView.text = "Scores: ${game.AwayTeamScore ?: "-"} - ${game.HomeTeamScore ?: "-"}"
+            } else {
+                gameIdView.text = "Game ID: -"
+                timeRemainingView.text = "Time Remaining: -"
+                seasonView.text = "Season: -"
+                statusView.text = "Status: -"
+                teamsView.text = "Teams: -"
+                scoresView.text = "Scores: -"
+            }
         }
 
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavigation)
@@ -34,9 +50,7 @@ class SportsActivity : ComponentActivity() {
                     startActivity(Intent(this, WeatherActivity::class.java))
                     true
                 }
-                R.id.nav_sports -> {
-                    true
-                }
+                R.id.nav_sports -> true
                 else -> false
             }
         }

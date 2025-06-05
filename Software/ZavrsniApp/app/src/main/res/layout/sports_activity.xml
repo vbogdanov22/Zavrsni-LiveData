@@ -19,6 +19,30 @@
         android:layout_height="wrap_content"
         android:text="Time Remaining:" />
 
+    <TextView
+        android:id="@+id/tvSeason"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Season:" />
+
+    <TextView
+        android:id="@+id/tvStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Status:" />
+
+    <TextView
+        android:id="@+id/tvTeams"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Teams:" />
+
+    <TextView
+        android:id="@+id/tvScores"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Scores:" />
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"
