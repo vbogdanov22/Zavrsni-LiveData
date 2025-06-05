@@ -1,5 +1,6 @@
 package hr.foi.zavrsniapp.ui.sports
 
+import android.util.Log
 import androidx.lifecycle.*
 import hr.foi.zavrsniapp.data.models.NbaGame
 import hr.foi.zavrsniapp.data.repository.SportsRepository
@@ -20,8 +21,9 @@ class SportsViewModel(
         refreshJob = viewModelScope.launch {
             while (true) {
                 try {
-                    val games = repository.getGamesById(gameId)
-                    _game.value = games.firstOrNull()
+                    val game = repository.getGamesById(gameId)
+                    _game.value = game.Game
+                    Log.d("SVM", "Game updated: $game")
                 } catch (_: Exception) {
                     _game.value = null
                 }
