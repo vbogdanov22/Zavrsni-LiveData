@@ -25,10 +25,20 @@ class SportsActivity : ComponentActivity() {
         val gameId = "20884"
         viewModel.startRefreshing(gameId)
 
+        viewModel.timeRemaining.observe(this) { totalSeconds ->
+            if (totalSeconds != null) {
+                val min = totalSeconds / 60
+                val sec = totalSeconds % 60
+                timeRemainingView.text = String.format("%02dm %02ds", min, sec)
+            } else {
+                timeRemainingView.text = "N/A"
+            }
+        }
+
         viewModel.game.observe(this) { game ->
             if (game != null) {
                 gameIdView.text = "${game.GameID}"
-                timeRemainingView.text = "${game.TimeRemainingMinutes ?: "-"}m ${game.TimeRemainingSeconds ?: "-"}s"
+                //timeRemainingView.text = "${game.TimeRemainingMinutes ?: "-"}m ${game.TimeRemainingSeconds ?: "-"}s"
                 seasonView.text = "${game.Season}"
                 statusView.text = "${game.Status}"
                 teamsView.text = "${game.AwayTeam} — ${game.HomeTeam}"
