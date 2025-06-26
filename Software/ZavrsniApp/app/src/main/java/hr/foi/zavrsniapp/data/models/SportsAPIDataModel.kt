@@ -18,6 +18,7 @@ data class NbaGame(
     val Quarter: String?,
     val TimeRemainingMinutes: Int?,
     val TimeRemainingSeconds: Int?,
+    val LastPlay: String?,
     val SeriesInfo: SeriesInfo?,
     val Quarters: List<Quarter>?
 )

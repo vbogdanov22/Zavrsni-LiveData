@@ -27,6 +27,7 @@ class SportsActivity : ComponentActivity() {
         val scoresView = findViewById<TextView>(R.id.tvScores)
         val awayLogoView = findViewById<ImageView>(R.id.ivAwayTeamLogo)
         val homeLogoView = findViewById<ImageView>(R.id.ivHomeTeamLogo)
+        val lastPlayView = findViewById<TextView>(R.id.tvLastPlay)
 
         val gameId = "20913" //20884
         viewModel.startRefreshing(gameId)
@@ -39,6 +40,7 @@ class SportsActivity : ComponentActivity() {
                 gameIdView.text = game.GameID.toString()
                 seasonView.text = game.Season.toString()
                 statusView.text = game.Status
+                lastPlayView.text = game.LastPlay
             }
         }
 
