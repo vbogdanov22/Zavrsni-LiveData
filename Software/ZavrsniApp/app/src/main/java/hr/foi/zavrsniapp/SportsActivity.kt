@@ -20,6 +20,7 @@ class SportsActivity : ComponentActivity() {
 
         val gameIdView = findViewById<TextView>(R.id.tvGameId)
         val timeRemainingView = findViewById<TextView>(R.id.tvTimeRemaining)
+        val quarterView = findViewById<TextView>(R.id.tvQuarter)
         val seasonView = findViewById<TextView>(R.id.tvSeason)
         val statusView = findViewById<TextView>(R.id.tvStatus)
         val teamsView = findViewById<TextView>(R.id.tvTeams)
@@ -27,33 +28,25 @@ class SportsActivity : ComponentActivity() {
         val awayLogoView = findViewById<ImageView>(R.id.ivAwayTeamLogo)
         val homeLogoView = findViewById<ImageView>(R.id.ivHomeTeamLogo)
 
-        val gameId = "20884"
+        val gameId = "20913" //20884
         viewModel.startRefreshing(gameId)
 
-        viewModel.timeRemaining.observe(this) { totalSeconds ->
-            if (totalSeconds != null) {
-                val min = totalSeconds / 60
-                val sec = totalSeconds % 60
-                timeRemainingView.text = String.format("%02dm %02ds", min, sec)
-            } else {
-                timeRemainingView.text = "N/A"
-            }
-        }
+        viewModel.formattedTimeRemaining.observe(this) { timeRemainingView.text = it }
+        viewModel.quarterString.observe(this) { quarterView.text = it }
 
         viewModel.game.observe(this) { game ->
             if (game != null) {
                 gameIdView.text = game.GameID.toString()
                 seasonView.text = game.Season.toString()
                 statusView.text = game.Status
-                "${game.AwayTeam} — ${game.HomeTeam}".also { teamsView.text = it }
-                "${game.AwayTeamScore ?: "-"} - ${game.HomeTeamScore ?: "-"}".also { scoresView.text = it }
-
-                val awayLogoUrl = "https://a.espncdn.com/i/teamlogos/nba/500/${game.AwayTeam}.png"
-                val homeLogoUrl = "https://a.espncdn.com/i/teamlogos/nba/500/${game.HomeTeam}.png"
-                Glide.with(this).load(awayLogoUrl).into(awayLogoView)
-                Glide.with(this).load(homeLogoUrl).into(homeLogoView)
             }
         }
+
+        viewModel.teamsString.observe(this) { teamsView.text = it }
+        viewModel.scoresString.observe(this) { scoresView.text = it }
+
+        viewModel.awayLogoUrl.observe(this) { Glide.with(this).load(it).into(awayLogoView) }
+        viewModel.homeLogoUrl.observe(this) { Glide.with(this).load(it).into(homeLogoView) }
 
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavigation)
         bottomNav.setOnItemSelectedListener { item ->

@@ -16,7 +16,44 @@ class SportsViewModel(
     val game: LiveData<NbaGame?> = _game
 
     private val _timeRemaining = MutableLiveData<Int?>()
-    val timeRemaining: LiveData<Int?> = _timeRemaining
+    val formattedTimeRemaining: LiveData<String> = _timeRemaining.map { totalSeconds ->
+        if (totalSeconds != null) {
+            val min = totalSeconds / 60
+            val sec = totalSeconds % 60
+            String.format("%02dm %02ds", min, sec)
+        } else {
+            "N/A"
+        }
+    }
+
+    val quarterString: LiveData<String> = game.map { game ->
+        when (game?.Quarter?.toIntOrNull()) {
+            1 -> "1st quarter"
+            2 -> "2nd quarter"
+            3 -> "3rd quarter"
+            4 -> "4th quarter"
+            else -> ""
+        }
+    }
+
+    val teamsString: LiveData<String> = game.map { game ->
+        if (game != null) "${game.AwayTeam} — ${game.HomeTeam}" else ""
+    }
+
+    val scoresString: LiveData<String> = game.map { game ->
+        if (game != null) "${game.AwayTeamScore ?: "-"} - ${game.HomeTeamScore ?: "-"}" else ""
+    }
+
+    private fun getLogoUrl(teamName: String?): String =
+        if (!teamName.isNullOrEmpty()) "https://a.espncdn.com/i/teamlogos/nba/500/${teamName}.png" else ""
+
+    val awayLogoUrl: LiveData<String> = game.map { game ->
+        getLogoUrl(game?.AwayTeam)
+    }
+
+    val homeLogoUrl: LiveData<String> = game.map { game ->
+        getLogoUrl(game?.HomeTeam)
+    }
 
     private var refreshJob: Job? = null
     private var timerJob: Job? = null

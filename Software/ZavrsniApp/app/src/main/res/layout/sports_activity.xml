@@ -104,13 +104,7 @@
                 android:text="@string/no_data" />
 
             <TextView
-                android:id="@+id/tvSeasonLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/season" />
-
-            <TextView
-                android:id="@+id/tvSeason"
+                android:id="@+id/tvQuarter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/no_data" />
@@ -123,6 +117,18 @@
 
             <TextView
                 android:id="@+id/tvStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/no_data" />
+
+            <TextView
+                android:id="@+id/tvSeasonLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/season" />
+
+            <TextView
+                android:id="@+id/tvSeason"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/no_data" />
