@@ -8,6 +8,6 @@ class WeatherRepository {
     private val API_KEY: String = BuildConfig.WEATHER_API_KEY
 
     suspend fun getWeather(location: String): WeatherResponse {
-        return RetrofitClient.apiService.getCurrentWeather(API_KEY, location)
+        return RetrofitClient.weatherApiService.getCurrentWeather(API_KEY, location)
     }
 }

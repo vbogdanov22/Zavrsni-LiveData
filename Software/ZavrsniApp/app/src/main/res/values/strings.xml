@@ -10,4 +10,16 @@
     <string name="last_updated">Last updated:</string>
     <string name="wind_speed">Wind speed:</string>
     <string name="feels_like">Feels like:</string>
+    <string name="no_data">-</string>
+    <string name="game_id">Game ID:</string>
+    <string name="away_team_logo">Away Team Logo</string>
+    <string name="home_team_logo">Home Team Logo</string>
+    <string name="teams">Teams:</string>
+    <string name="scores">Scores:</string>
+    <string name="time_remaining">Time remaining:</string>
+    <string name="season">Season:</string>
+    <string name="status">Status:</string>
+    <string name="last_play">Last play:</string>
+    <string name="sports_title">Sports</string>
+    <string name="quarter">Quarter:</string>
 </resources>

@@ -1,10 +1,12 @@
 package hr.foi.zavrsniapp
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.viewModels
 import com.bumptech.glide.Glide
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import hr.foi.zavrsniapp.databinding.WeatherActivityBinding
 import hr.foi.zavrsniapp.ui.weather.WeatherViewModel
 
@@ -25,6 +27,21 @@ class WeatherActivity : ComponentActivity() {
         weatherViewModel.isMetricUnit.observe(this) {
             updateUI()
         }
+
+        val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavigation)
+        bottomNav.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_weather -> {
+                    true
+                }
+                R.id.nav_sports -> {
+                    startActivity(Intent(this, SportsActivity::class.java))
+                    true
+                }
+                else -> false
+            }
+        }
+        bottomNav.selectedItemId = R.id.nav_weather
     }
 
     private fun updateUI(){
