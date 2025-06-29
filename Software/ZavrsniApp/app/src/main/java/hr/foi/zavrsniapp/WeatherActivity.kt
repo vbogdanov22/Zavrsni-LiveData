@@ -14,7 +14,8 @@ import hr.foi.zavrsniapp.ui.weather.WeatherViewModel
 enum class ToastMethod{
     BROKEN,
     NULL,
-    INSIDE_HANDLER
+    INSIDE_HANDLER,
+    SINGLE_LIVE_EVENT
 }
 
 class WeatherActivity : ComponentActivity() {
@@ -47,6 +48,14 @@ class WeatherActivity : ComponentActivity() {
                 }
                 ToastMethod.INSIDE_HANDLER -> {
                     // Event handler
+                }
+                ToastMethod.SINGLE_LIVE_EVENT -> {
+                    weatherViewModel.unitChangedSingleEvent.observe(this) { eventMessage ->
+                        eventMessage?.let {
+                            Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+                            weatherViewModel.unitChangedSingleEvent.value = null
+                        }
+                    }
                 }
             }
         }
@@ -96,6 +105,9 @@ class WeatherActivity : ComponentActivity() {
             when (weatherViewModel.toastMethod) {
                 ToastMethod.INSIDE_HANDLER -> {
                     Toast.makeText(this, "Units: $unit", Toast.LENGTH_SHORT).show()
+                }
+                ToastMethod.SINGLE_LIVE_EVENT -> {
+                    // Handled by SingleLiveEvent observer
                 }
                 else -> {
                     weatherViewModel.unitChangedMessage.value = "Units: $unit"
