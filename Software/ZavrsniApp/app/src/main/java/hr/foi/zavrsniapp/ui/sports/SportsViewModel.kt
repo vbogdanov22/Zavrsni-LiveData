@@ -75,7 +75,7 @@ class SportsViewModel(
                 } catch (_: Exception) {
                     _game.value = null
                 }
-                delay(30_000)
+                delay(65_000)
             }
         }
 
