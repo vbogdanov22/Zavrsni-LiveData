@@ -16,6 +16,7 @@ import hr.foi.zavrsniapp.data.models.WeatherDisplayData
 
 import hr.foi.zavrsniapp.data.models.WeatherResponse
 import hr.foi.zavrsniapp.data.repository.WeatherRepository
+import hr.foi.zavrsniapp.utilities.ToastEventWrapper
 import hr.foi.zavrsniapp.utilities.SingleLiveEvent
 
 class WeatherViewModel(private val repository: WeatherRepository = WeatherRepository()) : ViewModel() {
@@ -23,7 +24,8 @@ class WeatherViewModel(private val repository: WeatherRepository = WeatherReposi
     // TOAST
     val unitChangedMessage = MutableLiveData<String?>()
     var toastMethod = ToastMethod.BROKEN
-    val unitChangedSingleEvent = SingleLiveEvent<String?>()
+    val unitChangedSingleLiveEvent = SingleLiveEvent<String?>()
+    val unitChangedToastEventWrapper = MutableLiveData<ToastEventWrapper<String>>()
 
     // LOCATION INPUT
     private val _locationInput: MutableLiveData<String> = MutableLiveData(null)
@@ -38,9 +40,15 @@ class WeatherViewModel(private val repository: WeatherRepository = WeatherReposi
 
     fun toggleUnitType() {
         _isMetricUnit.value = !(_isMetricUnit.value ?: true)
-        if (toastMethod == ToastMethod.SINGLE_LIVE_EVENT) {
-            val unit = if (_isMetricUnit.value == true) "metric" else "imperial"
-            unitChangedSingleEvent.value = "Units: $unit"
+        val unit = if (_isMetricUnit.value == true) "metric" else "imperial"
+        when (toastMethod) {
+            ToastMethod.SINGLE_LIVE_EVENT -> {
+                unitChangedSingleLiveEvent.value = "Units: $unit"
+            }
+            ToastMethod.EVENT_WRAPPER -> {
+                unitChangedToastEventWrapper.value = ToastEventWrapper("Units: $unit")
+            }
+            else -> { }
         }
     }
 

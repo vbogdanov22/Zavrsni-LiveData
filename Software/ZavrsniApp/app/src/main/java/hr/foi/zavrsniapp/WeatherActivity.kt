@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.viewModels
-import androidx.lifecycle.MutableLiveData
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import hr.foi.zavrsniapp.databinding.WeatherActivityBinding
@@ -15,7 +14,8 @@ enum class ToastMethod{
     BROKEN,
     NULL,
     INSIDE_HANDLER,
-    SINGLE_LIVE_EVENT
+    SINGLE_LIVE_EVENT,
+    EVENT_WRAPPER
 }
 
 class WeatherActivity : ComponentActivity() {
@@ -50,10 +50,17 @@ class WeatherActivity : ComponentActivity() {
                     // Event handler
                 }
                 ToastMethod.SINGLE_LIVE_EVENT -> {
-                    weatherViewModel.unitChangedSingleEvent.observe(this) { eventMessage ->
+                    weatherViewModel.unitChangedSingleLiveEvent.observe(this) { eventMessage ->
                         eventMessage?.let {
                             Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
-                            weatherViewModel.unitChangedSingleEvent.value = null
+                            //weatherViewModel.unitChangedSingleLiveEvent.value = null
+                        }
+                    }
+                }
+                ToastMethod.EVENT_WRAPPER -> {
+                    weatherViewModel.unitChangedToastEventWrapper.observe(this) { eventWrapper ->
+                        eventWrapper.getContentIfNotHandled()?.let {
+                            Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
                         }
                     }
                 }
@@ -106,8 +113,8 @@ class WeatherActivity : ComponentActivity() {
                 ToastMethod.INSIDE_HANDLER -> {
                     Toast.makeText(this, "Units: $unit", Toast.LENGTH_SHORT).show()
                 }
-                ToastMethod.SINGLE_LIVE_EVENT -> {
-                    // Handled by SingleLiveEvent observer
+                ToastMethod.SINGLE_LIVE_EVENT, ToastMethod.EVENT_WRAPPER -> {
+                    // Observer
                 }
                 else -> {
                     weatherViewModel.unitChangedMessage.value = "Units: $unit"
@@ -116,11 +123,11 @@ class WeatherActivity : ComponentActivity() {
         }
 
         binding.btnSelectToastMethod.setOnClickListener {
-            val methods = ToastMethod.values().map { it.name }.toTypedArray()
+            val methods = ToastMethod.entries.map { it.name }.toTypedArray()
             android.app.AlertDialog.Builder(this)
                 .setTitle("Select Toast Handling Method")
                 .setItems(methods) { _, which ->
-                    weatherViewModel.toastMethod = ToastMethod.values()[which]
+                    weatherViewModel.toastMethod = ToastMethod.entries.toTypedArray()[which]
                     Toast.makeText(this, "Selected: ${methods[which]}", Toast.LENGTH_SHORT).show()
                 }
                 .show()
