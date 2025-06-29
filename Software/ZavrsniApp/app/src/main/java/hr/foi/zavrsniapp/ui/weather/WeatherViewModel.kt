@@ -7,6 +7,7 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.switchMap
 import androidx.lifecycle.ViewModel
+import hr.foi.zavrsniapp.ToastMethod
 
 import hr.foi.zavrsniapp.data.models.Condition
 import hr.foi.zavrsniapp.data.models.Current
@@ -17,6 +18,10 @@ import hr.foi.zavrsniapp.data.models.WeatherResponse
 import hr.foi.zavrsniapp.data.repository.WeatherRepository
 
 class WeatherViewModel(private val repository: WeatherRepository = WeatherRepository()) : ViewModel() {
+
+    // TOAST
+    val unitChangedMessage = MutableLiveData<String?>()
+    var toastMethod = ToastMethod.BROKEN
 
     // LOCATION INPUT
     private val _locationInput: MutableLiveData<String> = MutableLiveData(null)
