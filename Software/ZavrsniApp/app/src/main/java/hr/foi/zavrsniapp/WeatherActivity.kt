@@ -10,14 +10,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import hr.foi.zavrsniapp.databinding.WeatherActivityBinding
 import hr.foi.zavrsniapp.ui.weather.WeatherViewModel
 
-enum class ToastMethod{
-    BROKEN,
-    NULL,
-    INSIDE_HANDLER,
-    SINGLE_LIVE_EVENT,
-    EVENT_WRAPPER
-}
-
 class WeatherActivity : ComponentActivity() {
     private lateinit var binding: WeatherActivityBinding
     private val weatherViewModel : WeatherViewModel by viewModels()
