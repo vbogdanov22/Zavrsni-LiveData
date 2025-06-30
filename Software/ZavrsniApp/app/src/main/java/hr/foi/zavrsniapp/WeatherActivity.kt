@@ -46,23 +46,22 @@ class WeatherActivity : ComponentActivity() {
                         }
                     }
                 }
-                ToastMethod.INSIDE_HANDLER -> {
-                    // Event handler
+                else -> { /* Do nothing */ }
+            }
+        }
+
+        weatherViewModel.unitChangedSingleLiveEvent.observe(this) { eventMessage ->
+            if (weatherViewModel.toastMethod == ToastMethod.SINGLE_LIVE_EVENT) {
+                eventMessage?.let {
+                    Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
                 }
-                ToastMethod.SINGLE_LIVE_EVENT -> {
-                    weatherViewModel.unitChangedSingleLiveEvent.observe(this) { eventMessage ->
-                        eventMessage?.let {
-                            Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
-                            //weatherViewModel.unitChangedSingleLiveEvent.value = null
-                        }
-                    }
-                }
-                ToastMethod.EVENT_WRAPPER -> {
-                    weatherViewModel.unitChangedToastEventWrapper.observe(this) { eventWrapper ->
-                        eventWrapper.getContentIfNotHandled()?.let {
-                            Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
-                        }
-                    }
+            }
+        }
+
+        weatherViewModel.unitChangedToastEventWrapper.observe(this) { eventWrapper ->
+            if (weatherViewModel.toastMethod == ToastMethod.EVENT_WRAPPER) {
+                eventWrapper.getContentIfNotHandled()?.let {
+                    Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
                 }
             }
         }
