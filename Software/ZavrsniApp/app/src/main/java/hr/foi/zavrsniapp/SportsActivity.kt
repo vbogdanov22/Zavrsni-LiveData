@@ -2,6 +2,7 @@ package hr.foi.zavrsniapp
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.ComponentActivity
@@ -19,7 +20,9 @@ class SportsActivity : ComponentActivity() {
         setContentView(R.layout.sports_activity)
 
         val gameIdView = findViewById<TextView>(R.id.tvGameId)
+        val timeRemainingLabel = findViewById<TextView>(R.id.tvTimeRemainingLabel)
         val timeRemainingView = findViewById<TextView>(R.id.tvTimeRemaining)
+        val quarterLabel = findViewById<TextView>(R.id.tvQuarterLabel)
         val quarterView = findViewById<TextView>(R.id.tvQuarter)
         val seasonView = findViewById<TextView>(R.id.tvSeason)
         val statusView = findViewById<TextView>(R.id.tvStatus)
@@ -49,6 +52,15 @@ class SportsActivity : ComponentActivity() {
 
         viewModel.awayLogoUrl.observe(this) { Glide.with(this).load(it).into(awayLogoView) }
         viewModel.homeLogoUrl.observe(this) { Glide.with(this).load(it).into(homeLogoView) }
+
+        viewModel.timeAndQuarterVisibilityEvent.observe(this) { event ->
+            event.getContentIfNotHandled()?.let { shouldHide ->
+                timeRemainingLabel.visibility = if (shouldHide) View.GONE else View.VISIBLE
+                timeRemainingView.visibility = if (shouldHide) View.GONE else View.VISIBLE
+                quarterLabel.visibility = if (shouldHide) View.GONE else View.VISIBLE
+                quarterView.visibility = if (shouldHide) View.GONE else View.VISIBLE
+            }
+        }
 
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavigation)
         bottomNav.setOnItemSelectedListener { item ->

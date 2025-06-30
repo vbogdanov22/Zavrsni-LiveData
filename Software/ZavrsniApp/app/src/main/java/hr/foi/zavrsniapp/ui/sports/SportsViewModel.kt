@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.*
 import hr.foi.zavrsniapp.data.models.NbaGame
 import hr.foi.zavrsniapp.data.repository.SportsRepository
+import hr.foi.zavrsniapp.utilities.ToastEventWrapper
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -14,6 +15,25 @@ class SportsViewModel(
 
     private val _game = MutableLiveData<NbaGame?>()
     val game: LiveData<NbaGame?> = _game
+
+    private val _timeAndQuarterVisibilityEvent = MutableLiveData<ToastEventWrapper<Boolean>>()
+    val timeAndQuarterVisibilityEvent: LiveData<ToastEventWrapper<Boolean>> = _timeAndQuarterVisibilityEvent
+
+    private var fieldsHidden = false
+
+    private fun checkAndEmitVisibilityEvent(game: NbaGame?) {
+        if (game == null) return
+        val shouldHide = when (game.Status) {
+            "Scheduled" -> true
+            "InProgress" -> game.Quarter.isNullOrEmpty() || game.Quarter == "Half"
+            else -> false
+        }
+        Log.d("SVM", "Status: ${game.Status}, Quarter: ${game.Quarter}, shouldHide: $shouldHide, fieldsHidden: $fieldsHidden")
+        if (shouldHide != fieldsHidden) {
+            _timeAndQuarterVisibilityEvent.value = ToastEventWrapper(shouldHide)
+            fieldsHidden = shouldHide
+        }
+    }
 
     private val _timeRemaining = MutableLiveData<Int?>()
     val formattedTimeRemaining: LiveData<String> = _timeRemaining.map { totalSeconds ->
@@ -66,6 +86,7 @@ class SportsViewModel(
                 try {
                     val game = repository.getGameById(gameId)
                     _game.value = game.Game
+                    checkAndEmitVisibilityEvent(game.Game)
 
                     val minutes = game.Game.TimeRemainingMinutes ?: 0
                     val seconds = game.Game.TimeRemainingSeconds ?: 0
