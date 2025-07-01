@@ -30,12 +30,6 @@ class SingleLiveEvent<T> : MutableLiveData<T>() {
         super.setValue(t)
     }
 
-    // T = undefined
-    @MainThread
-    fun call() {
-        value = null
-    }
-
     companion object {
         private const val TAG = "SingleLiveEvent"
     }
