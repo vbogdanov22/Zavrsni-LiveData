@@ -2,9 +2,9 @@ package hr.foi.zavrsniapp.ui.sports
 
 import android.util.Log
 import androidx.lifecycle.*
+import hr.foi.zavrsniapp.SportsUIState
 import hr.foi.zavrsniapp.data.models.NbaGame
 import hr.foi.zavrsniapp.data.repository.SportsRepository
-import hr.foi.zavrsniapp.utilities.ToastEventWrapper
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -16,23 +16,14 @@ class SportsViewModel(
     private val _game = MutableLiveData<NbaGame?>()
     val game: LiveData<NbaGame?> = _game
 
-    private val _timeAndQuarterVisibilityEvent = MutableLiveData<ToastEventWrapper<Boolean>>()
-    val timeAndQuarterVisibilityEvent: LiveData<ToastEventWrapper<Boolean>> = _timeAndQuarterVisibilityEvent
-
-    private var fieldsHidden = false
-
-    private fun checkAndEmitVisibilityEvent(game: NbaGame?) {
-        if (game == null) return
-        val shouldHide = when (game.Status) {
-            "Scheduled" -> true
+    val uiState: LiveData<SportsUIState> = game.map { game ->
+        val timeAndQuarterHidden = when (game?.Status) {
+            "Scheduled", "Final" -> true
             "InProgress" -> game.Quarter.isNullOrEmpty() || game.Quarter == "Half"
             else -> false
         }
-        Log.d("SVM", "Status: ${game.Status}, Quarter: ${game.Quarter}, shouldHide: $shouldHide, fieldsHidden: $fieldsHidden")
-        if (shouldHide != fieldsHidden) {
-            _timeAndQuarterVisibilityEvent.value = ToastEventWrapper(shouldHide)
-            fieldsHidden = shouldHide
-        }
+        val lastPlayHidden = game?.Status == "Final"
+        SportsUIState(timeAndQuarterHidden, lastPlayHidden)
     }
 
     private val _timeRemaining = MutableLiveData<Int?>()
@@ -86,7 +77,6 @@ class SportsViewModel(
                 try {
                     val game = repository.getGameById(gameId)
                     _game.value = game.Game
-                    checkAndEmitVisibilityEvent(game.Game)
 
                     val minutes = game.Game.TimeRemainingMinutes ?: 0
                     val seconds = game.Game.TimeRemainingSeconds ?: 0

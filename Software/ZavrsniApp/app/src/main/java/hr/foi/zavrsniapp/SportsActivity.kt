@@ -30,6 +30,7 @@ class SportsActivity : ComponentActivity() {
         val scoresView = findViewById<TextView>(R.id.tvScores)
         val awayLogoView = findViewById<ImageView>(R.id.ivAwayTeamLogo)
         val homeLogoView = findViewById<ImageView>(R.id.ivHomeTeamLogo)
+        val lastPlayLabel = findViewById<TextView>(R.id.tvLastPlayLabel)
         val lastPlayView = findViewById<TextView>(R.id.tvLastPlay)
 
         val gameId = "20913" //20884
@@ -53,13 +54,14 @@ class SportsActivity : ComponentActivity() {
         viewModel.awayLogoUrl.observe(this) { Glide.with(this).load(it).into(awayLogoView) }
         viewModel.homeLogoUrl.observe(this) { Glide.with(this).load(it).into(homeLogoView) }
 
-        viewModel.timeAndQuarterVisibilityEvent.observe(this) { event ->
-            event.getContentIfNotHandled()?.let { shouldHide ->
-                timeRemainingLabel.visibility = if (shouldHide) View.GONE else View.VISIBLE
-                timeRemainingView.visibility = if (shouldHide) View.GONE else View.VISIBLE
-                quarterLabel.visibility = if (shouldHide) View.GONE else View.VISIBLE
-                quarterView.visibility = if (shouldHide) View.GONE else View.VISIBLE
-            }
+        viewModel.uiState.observe(this) { uiState ->
+            timeRemainingLabel.visibility = if (uiState.timeAndQuarterHidden) View.GONE else View.VISIBLE
+            timeRemainingView.visibility = if (uiState.timeAndQuarterHidden) View.GONE else View.VISIBLE
+            quarterLabel.visibility = if (uiState.timeAndQuarterHidden) View.GONE else View.VISIBLE
+            quarterView.visibility = if (uiState.timeAndQuarterHidden) View.GONE else View.VISIBLE
+
+            lastPlayLabel.visibility = if (uiState.lastPlayHidden) View.GONE else View.VISIBLE
+            lastPlayView.visibility = if (uiState.lastPlayHidden) View.GONE else View.VISIBLE
         }
 
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavigation)
