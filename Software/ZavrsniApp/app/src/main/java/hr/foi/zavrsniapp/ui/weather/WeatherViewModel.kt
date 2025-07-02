@@ -20,24 +20,18 @@ import hr.foi.zavrsniapp.utilities.ToastEventWrapper
 import hr.foi.zavrsniapp.utilities.SingleLiveEvent
 
 class WeatherViewModel(private val repository: WeatherRepository = WeatherRepository()) : ViewModel() {
-
-    // TOAST
     val unitChangedMessage = MutableLiveData<String?>()
     var toastMethod = ToastMethod.BROKEN
     val unitChangedSingleLiveEvent = SingleLiveEvent<String?>()
     val unitChangedToastEventWrapper = MutableLiveData<ToastEventWrapper<String>>()
 
-    // LOCATION INPUT
     private val _locationInput: MutableLiveData<String> = MutableLiveData(null)
-
     fun setLocationInput(location: String) {
         _locationInput.value = location
     }
 
-    // UNIT TOGGLE
     private val _isMetricUnit: MutableLiveData<Boolean> = MutableLiveData(true)
     val isMetricUnit: LiveData<Boolean> = _isMetricUnit
-
     fun toggleUnitType() {
         _isMetricUnit.value = !(_isMetricUnit.value ?: true)
         val unit = if (_isMetricUnit.value == true) "metric" else "imperial"
@@ -52,22 +46,21 @@ class WeatherViewModel(private val repository: WeatherRepository = WeatherReposi
         }
     }
 
-    // WEATHER DATA
     private val _weatherData: LiveData<WeatherResponse?> = _locationInput.switchMap { location ->
         androidx.lifecycle.liveData {
             if (location.isNullOrBlank()) {
                 emit(loadMockWeather())
             } else {
                 try {
-                    Log.d("WVM", "Attempting fetch of weather data for $location")
+                    Log.d("WVM", "Attempting fetch for $location")
                     val response = repository.getWeather(location)
                     Log.d("WVM", "$response")
                     emit(response)
                 } catch (e: Exception) {
-                    Log.e("WVM", "Error fetching weather data: ${e.message}")
+                    Log.e("WVM", "Error fetching data: ${e.message}")
                     emit(null)
                 }
-                Log.d("WVM", "Weather data fetched for location: $location")
+                Log.d("WVM", "Data fetched for $location")
             }
         }
     }

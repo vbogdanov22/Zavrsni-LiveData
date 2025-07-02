@@ -38,7 +38,7 @@ class WeatherActivity : ComponentActivity() {
                         }
                     }
                 }
-                else -> { /* Do nothing */ }
+                else -> { /* Observer */ }
             }
         }
 

@@ -9,10 +9,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class SportsViewModel(
-    private val repository: SportsRepository = SportsRepository()
-) : ViewModel() {
-
+class SportsViewModel(private val repository: SportsRepository = SportsRepository()) : ViewModel() {
     private val _game = MutableLiveData<NbaGame?>()
     val game: LiveData<NbaGame?> = _game
 

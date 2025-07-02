@@ -33,7 +33,7 @@ class SportsActivity : ComponentActivity() {
         val lastPlayLabel = findViewById<TextView>(R.id.tvLastPlayLabel)
         val lastPlayView = findViewById<TextView>(R.id.tvLastPlay)
 
-        val gameId = "20913" //20884
+        val gameId = "20913"
         viewModel.startRefreshing(gameId)
 
         viewModel.formattedTimeRemaining.observe(this) { timeRemainingView.text = it }
