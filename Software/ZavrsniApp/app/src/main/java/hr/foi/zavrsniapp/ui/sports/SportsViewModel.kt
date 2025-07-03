@@ -2,16 +2,14 @@ package hr.foi.zavrsniapp.ui.sports
 
 import android.util.Log
 import androidx.lifecycle.*
+import hr.foi.zavrsniapp.SportsUIState
 import hr.foi.zavrsniapp.data.models.NbaGame
 import hr.foi.zavrsniapp.data.repository.SportsRepository
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class SportsViewModel(
-    private val repository: SportsRepository = SportsRepository()
-) : ViewModel() {
-
+class SportsViewModel(private val repository: SportsRepository = SportsRepository()) : ViewModel() {
     private val _game = MutableLiveData<NbaGame?>()
     val game: LiveData<NbaGame?> = _game
 
@@ -91,6 +89,16 @@ class SportsViewModel(
                 }
             }
         }
+    }
+
+    val uiState: LiveData<SportsUIState> = game.map { game ->
+        val timeAndQuarterHidden = when (game?.Status) {
+            "Scheduled", "Final" -> true
+            "InProgress" -> game.Quarter.isNullOrEmpty() || game.Quarter == "Half"
+            else -> false
+        }
+        val lastPlayHidden = game?.Status == "Final"
+        SportsUIState(timeAndQuarterHidden, lastPlayHidden)
     }
 
     override fun onCleared() {

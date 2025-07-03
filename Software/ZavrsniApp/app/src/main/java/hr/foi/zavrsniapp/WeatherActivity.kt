@@ -28,6 +28,36 @@ class WeatherActivity : ComponentActivity() {
             updateUI()
         }
 
+        weatherViewModel.unitChangedMessage.observe(this) { message ->
+            when (weatherViewModel.toastMethod) {
+                ToastMethod.BROKEN, ToastMethod.NULL -> {
+                    message?.let {
+                        Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+                        if (weatherViewModel.toastMethod == ToastMethod.NULL) {
+                            weatherViewModel.unitChangedMessage.value = null
+                        }
+                    }
+                }
+                else -> { /* Observer */ }
+            }
+        }
+
+        weatherViewModel.unitChangedSingleLiveEvent.observe(this) { eventMessage ->
+            if (weatherViewModel.toastMethod == ToastMethod.SINGLE_LIVE_EVENT) {
+                eventMessage?.let {
+                    Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+
+        weatherViewModel.unitChangedToastEventWrapper.observe(this) { eventWrapper ->
+            if (weatherViewModel.toastMethod == ToastMethod.EVENT_WRAPPER) {
+                eventWrapper.getContentIfNotHandled()?.let {
+                    Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavigation)
         bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
@@ -69,12 +99,29 @@ class WeatherActivity : ComponentActivity() {
 
         binding.btnToggleUnit.setOnClickListener {
             weatherViewModel.toggleUnitType()
-            val unit = if (weatherViewModel.isMetricUnit.value == true) {
-                "metric"
-            } else {
-                "imperial"
+            val unit = if (weatherViewModel.isMetricUnit.value == true) "metric" else "imperial"
+            when (weatherViewModel.toastMethod) {
+                ToastMethod.INSIDE_HANDLER -> {
+                    Toast.makeText(this, "Units: $unit", Toast.LENGTH_SHORT).show()
+                }
+                ToastMethod.SINGLE_LIVE_EVENT, ToastMethod.EVENT_WRAPPER -> {
+                    // Observer
+                }
+                else -> {
+                    weatherViewModel.unitChangedMessage.value = "Units: $unit"
+                }
             }
-            Toast.makeText(this, "Units: $unit", Toast.LENGTH_SHORT).show()
+        }
+
+        binding.btnSelectToastMethod.setOnClickListener {
+            val methods = ToastMethod.entries.map { it.name }.toTypedArray()
+            android.app.AlertDialog.Builder(this)
+                .setTitle("Select Toast Handling Method")
+                .setItems(methods) { _, which ->
+                    weatherViewModel.toastMethod = ToastMethod.entries.toTypedArray()[which]
+                    Toast.makeText(this, "Selected: ${methods[which]}", Toast.LENGTH_SHORT).show()
+                }
+                .show()
         }
     }
 }

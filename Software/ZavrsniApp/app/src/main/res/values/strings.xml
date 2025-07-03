@@ -22,4 +22,5 @@
     <string name="last_play">Last play:</string>
     <string name="sports_title">Sports</string>
     <string name="quarter">Quarter:</string>
+    <string name="method">Select Toast method</string>
 </resources>

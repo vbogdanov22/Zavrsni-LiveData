@@ -7,6 +7,7 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.switchMap
 import androidx.lifecycle.ViewModel
+import hr.foi.zavrsniapp.ToastMethod
 
 import hr.foi.zavrsniapp.data.models.Condition
 import hr.foi.zavrsniapp.data.models.Current
@@ -15,40 +16,52 @@ import hr.foi.zavrsniapp.data.models.WeatherDisplayData
 
 import hr.foi.zavrsniapp.data.models.WeatherResponse
 import hr.foi.zavrsniapp.data.repository.WeatherRepository
+import hr.foi.zavrsniapp.utilities.ToastEventWrapper
+import hr.foi.zavrsniapp.utilities.SingleLiveEvent
 
 class WeatherViewModel(private val repository: WeatherRepository = WeatherRepository()) : ViewModel() {
-
-    // LOCATION INPUT
     private val _locationInput: MutableLiveData<String> = MutableLiveData(null)
-
     fun setLocationInput(location: String) {
         _locationInput.value = location
     }
 
-    // UNIT TOGGLE
     private val _isMetricUnit: MutableLiveData<Boolean> = MutableLiveData(true)
     val isMetricUnit: LiveData<Boolean> = _isMetricUnit
 
+    var toastMethod = ToastMethod.BROKEN
+    val unitChangedMessage = MutableLiveData<String?>()
+    val unitChangedSingleLiveEvent = SingleLiveEvent<String?>()
+    val unitChangedToastEventWrapper = MutableLiveData<ToastEventWrapper<String>>()
+
     fun toggleUnitType() {
         _isMetricUnit.value = !(_isMetricUnit.value ?: true)
+        val unit = if (_isMetricUnit.value == true) "metric" else "imperial"
+        when (toastMethod) {
+            ToastMethod.SINGLE_LIVE_EVENT -> {
+                unitChangedSingleLiveEvent.value = "Units: $unit"
+            }
+            ToastMethod.EVENT_WRAPPER -> {
+                unitChangedToastEventWrapper.value = ToastEventWrapper("Units: $unit")
+            }
+            else -> { }
+        }
     }
 
-    // WEATHER DATA
     private val _weatherData: LiveData<WeatherResponse?> = _locationInput.switchMap { location ->
         androidx.lifecycle.liveData {
             if (location.isNullOrBlank()) {
                 emit(loadMockWeather())
             } else {
                 try {
-                    Log.d("WVM", "Attempting fetch of weather data for $location")
+                    Log.d("WVM", "Attempting fetch for $location")
                     val response = repository.getWeather(location)
                     Log.d("WVM", "$response")
                     emit(response)
                 } catch (e: Exception) {
-                    Log.e("WVM", "Error fetching weather data: ${e.message}")
+                    Log.e("WVM", "Error fetching data: ${e.message}")
                     emit(null)
                 }
-                Log.d("WVM", "Weather data fetched for location: $location")
+                Log.d("WVM", "Data fetched for $location")
             }
         }
     }
