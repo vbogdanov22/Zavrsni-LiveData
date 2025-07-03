@@ -20,11 +20,6 @@ import hr.foi.zavrsniapp.utilities.ToastEventWrapper
 import hr.foi.zavrsniapp.utilities.SingleLiveEvent
 
 class WeatherViewModel(private val repository: WeatherRepository = WeatherRepository()) : ViewModel() {
-    val unitChangedMessage = MutableLiveData<String?>()
-    var toastMethod = ToastMethod.BROKEN
-    val unitChangedSingleLiveEvent = SingleLiveEvent<String?>()
-    val unitChangedToastEventWrapper = MutableLiveData<ToastEventWrapper<String>>()
-
     private val _locationInput: MutableLiveData<String> = MutableLiveData(null)
     fun setLocationInput(location: String) {
         _locationInput.value = location
@@ -32,6 +27,12 @@ class WeatherViewModel(private val repository: WeatherRepository = WeatherReposi
 
     private val _isMetricUnit: MutableLiveData<Boolean> = MutableLiveData(true)
     val isMetricUnit: LiveData<Boolean> = _isMetricUnit
+
+    var toastMethod = ToastMethod.BROKEN
+    val unitChangedMessage = MutableLiveData<String?>()
+    val unitChangedSingleLiveEvent = SingleLiveEvent<String?>()
+    val unitChangedToastEventWrapper = MutableLiveData<ToastEventWrapper<String>>()
+
     fun toggleUnitType() {
         _isMetricUnit.value = !(_isMetricUnit.value ?: true)
         val unit = if (_isMetricUnit.value == true) "metric" else "imperial"
