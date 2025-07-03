@@ -13,16 +13,6 @@ class SportsViewModel(private val repository: SportsRepository = SportsRepositor
     private val _game = MutableLiveData<NbaGame?>()
     val game: LiveData<NbaGame?> = _game
 
-    val uiState: LiveData<SportsUIState> = game.map { game ->
-        val timeAndQuarterHidden = when (game?.Status) {
-            "Scheduled", "Final" -> true
-            "InProgress" -> game.Quarter.isNullOrEmpty() || game.Quarter == "Half"
-            else -> false
-        }
-        val lastPlayHidden = game?.Status == "Final"
-        SportsUIState(timeAndQuarterHidden, lastPlayHidden)
-    }
-
     private val _timeRemaining = MutableLiveData<Int?>()
     val formattedTimeRemaining: LiveData<String> = _timeRemaining.map { totalSeconds ->
         if (totalSeconds != null) {
@@ -99,6 +89,16 @@ class SportsViewModel(private val repository: SportsRepository = SportsRepositor
                 }
             }
         }
+    }
+
+    val uiState: LiveData<SportsUIState> = game.map { game ->
+        val timeAndQuarterHidden = when (game?.Status) {
+            "Scheduled", "Final" -> true
+            "InProgress" -> game.Quarter.isNullOrEmpty() || game.Quarter == "Half"
+            else -> false
+        }
+        val lastPlayHidden = game?.Status == "Final"
+        SportsUIState(timeAndQuarterHidden, lastPlayHidden)
     }
 
     override fun onCleared() {
